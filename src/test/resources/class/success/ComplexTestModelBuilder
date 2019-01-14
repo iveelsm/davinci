@@ -1,0 +1,17 @@
+package io.breakfastcoders.davinci.annotations.builders;
+
+import io.breakfastcoders.davinci.serialization.strategy.KebabCaseStrategy;
+import io.breakfastcoders.davinci.error.ParsingException;
+import io.breakfastcoders.davinci.serialization.codecs.json.JsonCodecFactory;
+
+public class ComplexTestModelBuilder {
+  private static final KebabCaseStrategy strategy = new KebabCaseStrategy();
+
+  public static String encode(ComplexTestModel value) throws ParsingException {
+    return JsonCodecFactory.getInstance().getCodec(strategy).encode(value);
+  }
+
+  public static ComplexTestModel decode(String json) throws ParsingException {
+    return JsonCodecFactory.getInstance().getCodec(strategy).decode(json, ComplexTestModel.class);
+  }
+}

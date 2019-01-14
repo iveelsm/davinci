@@ -1,0 +1,17 @@
+package com.ibotta.test;
+
+import io.breakfastcoders.davinci.serialization.strategy.SnakeCaseStrategy;
+import io.breakfastcoders.davinci.error.ParsingException;
+import io.breakfastcoders.davinci.serialization.codecs.json.JsonCodecFactory;
+
+public class TestBuilder {
+  private static final SnakeCaseStrategy strategy = new SnakeCaseStrategy();
+
+  public static String encode(Test value) throws ParsingException {
+    return JsonCodecFactory.getInstance().getCodec(strategy).encode(value);
+  }
+
+  public static Test decode(String json) throws ParsingException {
+    return JsonCodecFactory.getInstance().getCodec(strategy).decode(json, Test.class);
+  }
+}

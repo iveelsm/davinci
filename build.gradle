@@ -1,0 +1,97 @@
+plugins {
+    id 'com.palantir.git-version' version '0.11.0'
+    id 'com.adarshr.test-logger' version '1.6.0'
+    id 'net.ltgt.errorprone' version '0.6'
+    id 'java'
+    id 'eclipse'
+    id 'maven-publish'
+}
+
+apply from: 'config/errorprone.gradle'
+apply from: 'config/checkstyle.gradle'
+apply from: 'config/findbugs.gradle'
+apply from: 'config/jacoco.gradle'
+
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.encoding = 'UTF-8'
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.encoding = 'UTF-8'
+    options.compilerArgs += "-parameters"
+}
+
+project.version = gitVersion()
+
+dependencies {
+    // Annotations
+    compile group: 'net.jcip',                name: 'jcip-annotations',        version: '+'
+    compile group: 'org.jetbrains',           name: 'annotations',             version: '15.+'
+    compile group: 'com.google.errorprone',   name: 'error_prone_annotations', version: '+'
+
+    // Jackson dependencies
+    compile group: 'com.fasterxml.jackson.core',       name: 'jackson-core',            version: '2.9.+'
+    compile group: 'com.fasterxml.jackson.core',       name: 'jackson-databind',        version: '2.9.+'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.+'
+
+    // Unit Test Dependencies
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.+'
+    testCompile group: 'org.assertj',       name: 'assertj-core',      version: '3.+'
+
+    // Google Compile Testing Dependencies
+    testCompile group: 'com.google.testing.compile', name: 'compile-testing', version: '+'
+    testCompile group: 'com.google.truth',           name: 'truth',           version: '+'
+
+    // What is this?
+    // Turns out there is some weirdness with gradle and versioning of Java.
+    // Gradle will not explicit load some libraries by default. And since we are dealing with some complex compile time testing, our tests break
+    // However, if you add the tools.jar to the test compile it works great!
+    // But it does require that gradle know about the JAVA_HOME environment variable
+    // See:
+    //   1. https://github.com/google/compile-testing/issues/102
+    //   2. https://github.com/google/compile-testing/issues/28#issuecomment-69204681
+    //   3. https://stackoverflow.com/questions/11345193/gradle-does-not-find-tools-jar
+    //   4. https://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/
+    //testCompile files(System.getenv("JAVA_HOME") + "/lib/tools.jar")
+    testCompile files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.breakfastcoders'
+            artifactId = 'davinci'
+            version = gitVersion()
+
+            from components.java
+        }
+    }
+}
+
+test {
+    testLogging {
+        events "skipped", "failed"
+        exceptionFormat "full"
+    }
+
+    testlogger {
+        theme 'standard'
+        showExceptions true
+        slowThreshold 1000
+        showSummary true
+        showStandardStreams true
+    }
+}
+
+wrapper {
+    gradleVersion = '4.10.3'
+}

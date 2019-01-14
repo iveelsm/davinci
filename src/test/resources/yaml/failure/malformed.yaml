@@ -1,0 +1,8 @@
+sub_class_list:
+deeper:
+  value: '1'
+  - deeper:
+      value: 1234
+parameters:
+  test1: '1'
+  test2: '2'

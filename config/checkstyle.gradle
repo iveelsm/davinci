@@ -1,0 +1,26 @@
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion = "8.12"
+    configFile = rootProject.file("checkstyle.xml")
+    sourceSets = [project.sourceSets.main]
+}
+
+// Execute Checkstyle on all modified files
+task checkstyle(type: Checkstyle) {
+    // Specify all files that should be checked
+    classpath = files()
+    source "${project.rootDir}"
+
+    // Define the output folder of the generated reports
+    reports {
+        html {
+            enabled true
+            destination rootProject.file("build/reports/checkstyle/checkstyle.html")
+        }
+        xml {
+            enabled true
+            destination rootProject.file("build/reports/checkstyle/checkstyle.xml")
+        }
+    }
+}

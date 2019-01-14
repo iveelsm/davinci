@@ -1,0 +1,9 @@
+---
+subClassList:
+- deeper:
+    value: "1"
+- deeper:
+    value: "2"
+parameters:
+  test1: "1"
+  test2: "2"

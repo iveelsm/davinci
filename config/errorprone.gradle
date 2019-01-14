@@ -1,0 +1,4 @@
+dependencies {
+    errorprone      group: "com.google.errorprone", name: "error_prone_core", version: "2.3.1"
+    errorproneJavac group: "com.google.errorprone", name: "javac",            version: "+"
+}

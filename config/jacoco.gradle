@@ -1,0 +1,38 @@
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    reports {
+        xml.destination rootProject.file("build/reports/jacoco/jacoco.xml")
+        html.destination rootProject.file("build/reports/jacoco/jacoco.html")
+        csv.enabled = false
+    }
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it)
+        })
+    }
+}
+
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it)
+        })
+    }
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.85
+            }
+
+        }
+
+        rule {
+            element = "CLASS"
+            limit {
+                counter = "BRANCH"
+                minimum = 0.3
+            }
+        }
+    }
+}
