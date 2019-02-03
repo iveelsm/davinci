@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import static junit.framework.TestCase.assertTrue;
 
 public class ConcurrentAccess {
+    @SuppressWarnings("FutureReturnValueIgnored")
     public static void assertConcurrent(final String message, @NotNull final List<? extends Runnable> runnables, final int maxTimeoutSeconds) throws InterruptedException {
         final int numThreads = runnables.size();
         final List<Throwable> exceptions = Collections.synchronizedList(new ArrayList<>());

@@ -1,7 +1,8 @@
 plugins {
     id 'com.palantir.git-version' version '0.11.0'
-    id 'com.adarshr.test-logger' version '1.6.0'
-    id 'net.ltgt.errorprone' version '0.6'
+    id 'com.adarshr.test-logger'  version '1.6.0'
+    id 'net.ltgt.errorprone'      version '0.6'
+    id 'com.github.spotbugs'      version '1.6.9'
     id 'java'
     id 'eclipse'
     id 'maven-publish'
