@@ -1,9 +1,7 @@
 package io.breakfastcoders.davinci.annotations.processors;
 
-import com.google.testing.compile.CompilationRule;
 import java.io.IOException;
 import javax.tools.JavaFileObject;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertAbout;
@@ -11,9 +9,6 @@ import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static io.breakfastcoders.davinci.utils.TestUtilities.constructFileObjectForResource;
 
 public class CodecProcessorTest {
-    @Rule
-    public CompilationRule rule = new CompilationRule();
-
     private CodecProcessor processor = new CodecProcessor();
 
 

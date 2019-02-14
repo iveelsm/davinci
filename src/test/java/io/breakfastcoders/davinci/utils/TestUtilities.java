@@ -40,14 +40,6 @@ public class TestUtilities {
         throw new IOException("Bad resource call");
     }
 
-    private static File getFile(String resourcePath) throws IOException {
-        URL url = Thread.currentThread()
-                .getClass()
-                .getClassLoader()
-                .getResource(resourcePath);
-        return getFile(url);
-    }
-
     private static File getFile(URL url) throws IOException {
         if (url != null) {
             try {

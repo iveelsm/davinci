@@ -1,8 +1,18 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.9"
+    }
+}
+
 plugins {
     id 'com.palantir.git-version' version '0.11.0'
     id 'com.adarshr.test-logger'  version '1.6.0'
     id 'net.ltgt.errorprone'      version '0.6'
-    id 'com.github.spotbugs'      version '1.6.9'
     id 'java'
     id 'eclipse'
     id 'maven-publish'
@@ -12,6 +22,7 @@ apply from: 'config/errorprone.gradle'
 apply from: 'config/checkstyle.gradle'
 apply from: 'config/findbugs.gradle'
 apply from: 'config/jacoco.gradle'
+apply from: 'config/spotbugs.gradle'
 
 
 repositories {
@@ -90,6 +101,13 @@ test {
         slowThreshold 1000
         showSummary true
         showStandardStreams true
+    }
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
     }
 }
 

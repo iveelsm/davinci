@@ -19,7 +19,7 @@ before_script:
 
 build:
   stage: compile
-  script: gradle --build-cache build -x findBugsMain -x findBugsTest -x checkstyleMain -x checkstyleTest -x test -x spotbugsMain -x spotbugsTest
+  script: gradle compileJava compileTestJava
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
@@ -29,13 +29,16 @@ build:
 
 test:
   stage: test
-  script: gradle test -x findBugsMain -x findBugsTest -x checkstyleMain -x checkstyleTest -x spotbugsMain -x spotbugsTest
+  script: gradle test
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
     paths:
       - build
       - .gradle
+  artifacts:
+    reports:
+      junit: build/test-results/test/TEST-*.xml
 
 checkstyle:
   stage: validate
@@ -46,20 +49,39 @@ checkstyle:
     paths:
     - build
     - .gradle
+  artifacts:
+    paths:
+      - build/reports/checkstyle/*.html
 
 findbugs:
   stage: validate
-  script: gradle findBugsMain
+  script: gradle findBugsMain findBugsTest
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
     paths:
     - build
     - .gradle
+  artifacts:
+    paths:
+    - build/reports/findbugs/*.html
 
 spotbugs:
   stage: validate
-  script: gradle spotbugsMain
+  script: gradle spotbugsMain spotbugsTest
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+    - build
+    - .gradle
+  artifacts:
+    paths:
+    - build/reports/spotbugs/*.html
+
+coverage:
+  stage: validate
+  script: gradle jacocoTestCoverageVerification
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -67,8 +89,17 @@ spotbugs:
     - build
     - .gradle
 
+coverage_report:
+  stage: report
+  script: gradle jacocoTestReport
+  allow_failure: true
+  artifacts:
+    paths:
+    - build/reports/jacoco/jacoco.html/*
+
 code_quality:
   image: docker:stable
+  stage: report
   variables:
     DOCKER_DRIVER: overlay2
   allow_failure: true
@@ -85,4 +116,12 @@ code_quality:
     reports:
       codequality: gl-code-quality-report.json
 
+pages:
+  stage: report
+  script:
+  - mv build/ public/
+  artifacts:
+    paths:
+    - public
+    expire_in: 30 days
 
