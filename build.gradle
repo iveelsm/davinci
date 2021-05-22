@@ -74,7 +74,7 @@ dependencies {
     //   3. https://stackoverflow.com/questions/11345193/gradle-does-not-find-tools-jar
     //   4. https://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/
     //testCompile files(System.getenv("JAVA_HOME") + "/lib/tools.jar")
-    testCompile files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+//    testCompile files(org.gradle.internal.jvm.Jvm.current().toolsJar)
 }
 
 publishing {
